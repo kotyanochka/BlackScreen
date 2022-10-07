@@ -1,0 +1,46 @@
+﻿<Window x:Class="WPF.Views.BlackWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF.Views"
+        xmlns:vm ="clr-namespace:WPF.ViewModels"
+        xmlns:c ="clr-namespace:WPF.Converters"
+         xmlns:prism="http://prismlibrary.com/"
+         prism:ViewModelLocator.AutoWireViewModel="True"
+        mc:Ignorable="d"
+        
+        IsHitTestVisible="True"
+        d:DataContext="{d:DesignInstance vm:BlackWindowViewModel}"
+        Title="BlackWindow" Height="1080" Width="1920" WindowState="Maximized"
+        Background="Transparent"
+        AllowsTransparency="True" WindowStyle="None">
+
+    <!--<Grid Background="Black" Visibility="{Binding Model.IsNothing, Converter={c:VisibilityConverter}, ConverterParameter=Reverse}">
+        --><!--<Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Model.Text, FallbackValue=TEXT, Mode=TwoWay}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="100"/>--><!--<Button Content="x" Foreground="White" Grid.Column="1" Command="{Binding DeleteCommand}" CommandParameter="{Binding Model.Text}" Background="Black" Grid.Row="2"/>--><!--
+    </Grid>-->
+    <Window.Resources>
+        <DataTemplate x:Key="listTemplate">
+            <StackPanel Margin="0">
+                <Image Source="{Binding PicPath}" Width="{Binding _width}" Height="{Binding _height}" Stretch="Fill"/>
+            </StackPanel>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="listPanelTemplate">
+            <WrapPanel Background="Black"/>
+        </ItemsPanelTemplate>
+    </Window.Resources>
+    <Grid>
+        <ListBox x:Name="pics"
+                 ItemsSource="{Binding Model.PicsCollection}"
+                 ItemTemplate="{StaticResource listTemplate}"
+                 ItemsPanel="{StaticResource listPanelTemplate}"
+                
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 />
+    </Grid>
+</Window>

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
-using System.Text;
 
-namespace WPF.Services
+namespace WPF.Services;
+
+public interface IBlackWindowConsumer
 {
-    public interface IBlackWindowConsumer
-    {
-        IObservable<string> Messages { get; }
-    }
-
+    IObservable<string> Messages { get; }
 }

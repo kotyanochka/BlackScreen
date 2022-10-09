@@ -3,21 +3,20 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace WPF.Converters
+namespace WPF.Converters;
+
+public abstract class ConverterBase<T> : MarkupExtension, IValueConverter
+     where T : class, new()
 {
-    public abstract class ConverterBase<T> : MarkupExtension, IValueConverter
-         where T : class, new()
-    {
-        public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
+    public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
 
-        public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => new NotImplementedException();
+    public virtual object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => new NotImplementedException();
 
-        #region MarkupExtension members
+    #region MarkupExtension members
 
-        public override object ProvideValue(IServiceProvider serviceProvider) => _converter ?? (_converter = new T());
+    public override object ProvideValue(IServiceProvider serviceProvider) => _converter;
 
-        private static T _converter;
+    private static readonly T _converter = new();
 
-        #endregion
-    }
+    #endregion
 }

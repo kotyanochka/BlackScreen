@@ -6,41 +6,43 @@
         xmlns:local="clr-namespace:WPF.Views"
         xmlns:vm ="clr-namespace:WPF.ViewModels"
         xmlns:c ="clr-namespace:WPF.Converters"
-         xmlns:prism="http://prismlibrary.com/"
-         prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:med ="clr-namespace:WPF.Models"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         
         IsHitTestVisible="True"
         d:DataContext="{d:DesignInstance vm:BlackWindowViewModel}"
         Title="BlackWindow" Height="1080" Width="1920" WindowState="Maximized"
         Background="Transparent"
-        AllowsTransparency="True" WindowStyle="None">
+        AllowsTransparency="True" 
+        WindowStyle="None"
+        x:Name="main">
 
-    <!--<Grid Background="Black" Visibility="{Binding Model.IsNothing, Converter={c:VisibilityConverter}, ConverterParameter=Reverse}">
-        --><!--<Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Model.Text, FallbackValue=TEXT, Mode=TwoWay}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="100"/>--><!--<Button Content="x" Foreground="White" Grid.Column="1" Command="{Binding DeleteCommand}" CommandParameter="{Binding Model.Text}" Background="Black" Grid.Row="2"/>--><!--
-    </Grid>-->
-    <Window.Resources>
-        <DataTemplate x:Key="listTemplate">
-            <StackPanel Margin="0">
-                <Image Source="{Binding PicPath}" Width="{Binding _width}" Height="{Binding _height}" Stretch="Fill"/>
-            </StackPanel>
-        </DataTemplate>
-        <ItemsPanelTemplate x:Key="listPanelTemplate">
-            <WrapPanel Background="Black"/>
-        </ItemsPanelTemplate>
-    </Window.Resources>
-    <Grid>
-        <ListBox x:Name="pics"
+    <Grid Background="Black" Visibility="{Binding Model.IsNothing, Converter={c:VisibilityReverseConverter}}">
+        <ListBox
                  ItemsSource="{Binding Model.PicsCollection}"
-                 ItemTemplate="{StaticResource listTemplate}"
-                 ItemsPanel="{StaticResource listPanelTemplate}"
-                
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                 />
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Background="Black"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0">
+                        <Image Source="{Binding Bitmap}"
+                       Width="300"
+                       Height="300"
+                       Stretch="Fill">
+                            <Image.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding ElementName=main, Path=DataContext.DeleteCommand}" CommandParameter="{Binding}"/>
+                            </Image.InputBindings>
+                        </Image>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

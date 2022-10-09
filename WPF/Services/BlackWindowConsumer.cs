@@ -11,7 +11,7 @@ namespace WPF.Services
         public IObservable<string> Messages { get; }
         public IConsumer Consumer { get; }
 
-        private ISubject<string> _txt;
+        private readonly ISubject<string> _txt;
 
         public BlackWindowConsumer(IConsumer consumer)
         {
@@ -20,11 +20,10 @@ namespace WPF.Services
             // НАДО ИСПРАВИТЬ Consumer.Subscribe. 
             //Messages = Observable.FromAsync<string>(() => Consumer.Subscribe);
 
-            #region УДАЛИТЬ ПОТОМ
-            
-            _txt = new ReplaySubject<string>();           
-            Messages = _txt;
-            
+            #region УДАЛИТЬ ПОТОМ            
+             
+            Messages = _txt = new ReplaySubject<string>();
+
             //ToDo подключиться к RabbitMQ
             Task.Run(async () =>
             {

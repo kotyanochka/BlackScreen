@@ -20,6 +20,8 @@ public class ImageModel : ReactiveObject
     /// </summary>
     [Reactive] public BitmapImage Bitmap { get; set; }
 
+    [Reactive] public string Text { get; set; }
+
     public ImageModel(string base64ImageString)
     {
         byte[] imageBytes = Convert.FromBase64String(base64ImageString);

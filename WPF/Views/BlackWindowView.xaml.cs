@@ -1,4 +1,4 @@
-﻿namespace WPF.Views;
+﻿namespace BlackWindow.Views;
 
 public partial class BlackWindowView
 {

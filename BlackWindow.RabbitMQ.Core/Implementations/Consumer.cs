@@ -1,30 +1,31 @@
 ﻿using BlackWindow.RabbitMQ.Core.Data;
 using EasyNetQ;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 namespace BlackWindow.RabbitMQ.Core.Implementations;
 
 public class Consumer : IConsumer
 {
-    protected IBus Bus { get; set; }
+    protected IBus Bus { get; init; }
 
-    public IObservable<string> MessagesObs { get; }      
+    public string SubscriptionId { get; init; }
 
-    public string SubscriptionId { get; set; }
+    public string ConnectionString { get; init; }
 
-    public Consumer()
+    public IObservable<string> MessagesObs { get; } 
+
+    public Consumer(ISettings settings)
     {
-#if DEBUG
-        #region TODO Удалить когда появится доступ к шине
+        ConnectionString = settings.ConnectionString;
+        SubscriptionId = settings.SubscriptionId;
+        Bus = RabbitHutch.CreateBus(ConnectionString);
+
+#if DEBUG //TODO Удалить когда появится доступ к шине
         MessagesObs = Observable
             .Interval(TimeSpan.FromSeconds(3))
             .Take(10)
             .Select(x => x % 2 == 1 ? ImageSamples.ImageJpg : ImageSamples.ImagePng);
-        #endregion
 #else
-        SubscriptionId = "my_subscription_id";
-        Bus = RabbitHutch.CreateBus("host=localhost");
 
         MessagesObs = Observable
             .Create<string>(observer => Bus.PubSub.SubscribeAsync<string>(SubscriptionId, observer.OnNext))

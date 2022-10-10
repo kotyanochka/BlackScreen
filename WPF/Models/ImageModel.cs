@@ -1,30 +1,17 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Media.Imaging;
-using System.Drawing.Imaging;
+﻿using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace BlackWindow.Models;
 
-public class ImageModel
+public class ImageModel : ReactiveObject
 {
-    public BitmapImage Bitmap { get; init; }
+    public string Base64String { get; init; }
 
-    public string Text { get; init; }
+    public extern string SecondsLeft { [ObservableAsProperty] get; }
 
-    public ImageModel(string base64ImageString, string text) 
+    public ImageModel(string base64ImageString) 
     {
-        byte[] imageBytes = Convert.FromBase64String(base64ImageString);
-        using var ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-        var data = Image.FromStream(ms, true);
-        BitmapImage bitmap = new();
-        bitmap.BeginInit();
-        MemoryStream memoryStream = new();
-        data.Save(memoryStream, ImageFormat.Png);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-        bitmap.StreamSource = memoryStream;
-        bitmap.EndInit();
-        Bitmap =  bitmap;
-        Text = text;
+        Base64String = base64ImageString;       
     }    
 }
+        

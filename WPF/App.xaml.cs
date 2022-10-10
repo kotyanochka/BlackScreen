@@ -1,13 +1,15 @@
-﻿using BlackWindow.RabbitMQ.Core;
+﻿using BlackWindow.Configuration;
+using BlackWindow.RabbitMQ.Core;
 using BlackWindow.RabbitMQ.Core.Implementations;
+using BlackWindow.Views;
 using Prism.Ioc;
+using Prism.Unity;
 using System.Windows;
 using Unity;
-using WPF.Views;
 
-namespace WPF;
+namespace BlackWindow;
 
-public partial class App
+public partial class App : PrismApplication
 {
     protected override Window CreateShell()
         => Container.Resolve<BlackWindowView>();
@@ -15,6 +17,7 @@ public partial class App
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
         containerRegistry
-            .RegisterSingleton<IConsumer, Consumer>();        
+            .RegisterSingleton<IConsumer, Consumer>()
+            .RegisterSingleton<ISettings, Settings>();        
     }
 }

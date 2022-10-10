@@ -1,54 +1,47 @@
 ﻿using BlackWindow.Models;
-using BlackWindow.RabbitMQ.Core.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.ObjectModel;
-using WPF.Services;
 using System.Reactive.Linq;
-using BlackWindow.Extensions;
+using BlackWindow.RabbitMQ.Core;
 
 namespace WPF.Models;
 
 public class BlackWindowModel : ReactiveObject
 {
     private int _amount = 1;
-    public int DisplayLimit { get; set; } = 15;
-    public ObservableCollection<ImageModel> PicsCollection { get; set; } = new ObservableCollection<ImageModel>();
-    [Reactive] public bool IsNothing { get; private set; }
     
-    public BlackWindowModel(IBlackWindowConsumer consumer)
+    public int DisplayLimit { get; init; } = 15;
+    public ObservableCollection<ImageModel> PicsCollection { get; init; } = new ObservableCollection<ImageModel>();
+    public extern bool IsNothing { [ObservableAsProperty] get; }
+
+
+    public BlackWindowModel(IConsumer consumer)
     {
-        consumer.Messages
+        consumer.MessagesObs
             .ObserveOnDispatcher()
-            .Subscribe(Add);
+            .Subscribe(AddImage);
 
         PicsCollection
             .WhenAnyValue(x => x.Count)     
-            .Select(x=>x ==0)
-            .Subscribe(x => IsNothing = x)
-            .ToDisposable();
+            .Select(x=>x==0)
+            .ToPropertyEx(this, x => x.IsNothing);
     }
 
-    private void Add(string base64Image)
+    private void AddImage(string base64Image)
     {
-        var imageModel = new ImageModel(base64Image)
-        {
-            Text = (_amount++).ToString()
-        };
-
-        PicsCollection.Add(imageModel);
+        var imageModel = new ImageModel(base64Image, (_amount++).ToString());
+        PicsCollection.Add(imageModel); 
             
-        Observable
-            .Timer(DateTimeOffset.Now.AddSeconds(DisplayLimit))
+        Observable.Return(imageModel)
+            .Delay(TimeSpan.FromSeconds(DisplayLimit))  
             .ObserveOnDispatcher()
-            .Subscribe(_ => DeleteImage(imageModel));
+            .Subscribe(DeleteImage);
     }
 
-    public void DeleteImage(object value)
+    public void DeleteImage(ImageModel m)
     {
-        if (value is not ImageModel m || !PicsCollection.Contains(m)) return;
-
         PicsCollection.Remove(m);
     }
 }

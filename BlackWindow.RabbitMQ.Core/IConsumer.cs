@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace BlackWindow.RabbitMQ.Core;
 
-namespace BlackWindow.RabbitMQ.Core
+public interface IConsumer 
 {
-    public interface IConsumer 
-    {
-        Task Subscribe(Action<string> action);
-
-    }
+    IObservable<string> MessagesObs { get; }
 }

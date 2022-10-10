@@ -1,6 +1,4 @@
-﻿using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -8,33 +6,25 @@ using System.Drawing.Imaging;
 
 namespace BlackWindow.Models;
 
-public class ImageModel : ReactiveObject
+public class ImageModel
 {
-    /// <summary>
-    /// Тут под любое изображение подходит, но есть проблемы привязки
-    /// </summary>
-    [Reactive] public Image Data { get; set; }
+    public BitmapImage Bitmap { get; init; }
 
-    /// <summary>
-    /// Тут данные приводятся к BitmapImage, который легко привязывается
-    /// </summary>
-    [Reactive] public BitmapImage Bitmap { get; set; }
+    public string Text { get; init; }
 
-    [Reactive] public string Text { get; set; }
-
-    public ImageModel(string base64ImageString)
+    public ImageModel(string base64ImageString, string text) 
     {
         byte[] imageBytes = Convert.FromBase64String(base64ImageString);
         using var ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
-        Data = Image.FromStream(ms, true);
-
-        var bitmap = new BitmapImage();
+        var data = Image.FromStream(ms, true);
+        BitmapImage bitmap = new();
         bitmap.BeginInit();
-        MemoryStream memoryStream = new MemoryStream();
-        Data.Save(memoryStream, ImageFormat.Png);
+        MemoryStream memoryStream = new();
+        data.Save(memoryStream, ImageFormat.Png);
         memoryStream.Seek(0, SeekOrigin.Begin);
         bitmap.StreamSource = memoryStream;
         bitmap.EndInit();
         Bitmap =  bitmap;
+        Text = text;
     }    
 }

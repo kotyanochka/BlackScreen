@@ -1,18 +1,35 @@
-﻿using EasyNetQ;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BlackWindow.RabbitMQ.Core.Data;
+using EasyNetQ;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
-namespace BlackWindow.RabbitMQ.Core.Implementations
+namespace BlackWindow.RabbitMQ.Core.Implementations;
+
+public class Consumer : IConsumer
 {
-    public class Consumer : IConsumer
+    protected IBus Bus { get; set; }
+
+    public IObservable<string> MessagesObs { get; }      
+
+    public string SubscriptionId { get; set; }
+
+    public Consumer()
     {
-        public Task Subscribe(Action<string> action)
-        {
-            using var bus = RabbitHutch.CreateBus("host=localhost");
-            return bus.PubSub.SubscribeAsync("my_subscription_id", action);
-        }
+#if DEBUG
+        #region TODO Удалить когда появится доступ к шине
+        MessagesObs = Observable
+            .Interval(TimeSpan.FromSeconds(3))
+            .Take(10)
+            .Select(x => x % 2 == 1 ? ImageSamples.ImageJpg : ImageSamples.ImagePng);
+        #endregion
+#else
+        SubscriptionId = "my_subscription_id";
+        Bus = RabbitHutch.CreateBus("host=localhost");
+
+        MessagesObs = Observable
+            .Create<string>(observer => Bus.PubSub.SubscribeAsync<string>(SubscriptionId, observer.OnNext))
+            .Publish()
+            .AutoConnect(0);
+#endif
     }
 }

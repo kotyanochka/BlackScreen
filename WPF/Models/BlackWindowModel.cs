@@ -7,22 +7,19 @@ using System.Collections.ObjectModel;
 using WPF.Services;
 using System.Reactive.Linq;
 using BlackWindow.Extensions;
+
 namespace WPF.Models;
 
-public class BlackWindowModel : ReactiveObject //: BindableBase
+public class BlackWindowModel : ReactiveObject
 {
-    private readonly IBlackWindowConsumer _consumer;
-
-    [Reactive] public ObservableCollection<ImageModel> PicsCollection { get; set; }
-    [Reactive] public bool IsNothing { get; private set; }        
-
+    private int _amount = 1;
+    public int DisplayLimit { get; set; } = 15;
+    public ObservableCollection<ImageModel> PicsCollection { get; set; } = new ObservableCollection<ImageModel>();
+    [Reactive] public bool IsNothing { get; private set; }
+    
     public BlackWindowModel(IBlackWindowConsumer consumer)
     {
-        PicsCollection = new ObservableCollection<ImageModel>();       
-
-        _consumer = consumer;
-       
-        _consumer.Messages
+        consumer.Messages
             .ObserveOnDispatcher()
             .Subscribe(Add);
 
@@ -34,23 +31,24 @@ public class BlackWindowModel : ReactiveObject //: BindableBase
     }
 
     private void Add(string base64Image)
-    {       
-        var imageModel = new ImageModel(base64Image);
+    {
+        var imageModel = new ImageModel(base64Image)
+        {
+            Text = (_amount++).ToString()
+        };
 
         PicsCollection.Add(imageModel);
             
         Observable
-            .Timer(DateTimeOffset.Now.AddSeconds(15))
+            .Timer(DateTimeOffset.Now.AddSeconds(DisplayLimit))
             .ObserveOnDispatcher()
-            .Subscribe(_ => DeleteImage(imageModel))
-            .ToDisposable();
+            .Subscribe(_ => DeleteImage(imageModel));
     }
 
     public void DeleteImage(object value)
     {
-        if (value is ImageModel m && PicsCollection.Contains(m))
-        {
-            PicsCollection.Remove(m);
-        }
+        if (value is not ImageModel m || !PicsCollection.Contains(m)) return;
+
+        PicsCollection.Remove(m);
     }
 }

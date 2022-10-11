@@ -7,9 +7,9 @@ public static class ObservableExtensions
 {
     private static readonly ICollection<IDisposable> _observers = new List<IDisposable>();
 
-    public static IDisposable ToDisposable(this IDisposable disposable)
+    public static IDisposable Cache(this IDisposable disposable)
     {
         _observers.Add(disposable);
         return disposable;
     }
-}
+}   

@@ -1,24 +1,23 @@
-﻿using BlackWindow.Models;
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using BlackWindow.RabbitMQ.Core;
 
-namespace WPF.Models;
+namespace BlackWindow.Models;
 
 public class BlackWindowModel : ReactiveObject
 {
-    private int _amount = 1;
-    
-    public int DisplayLimit { get; init; } = 15;
+    public int DisplayLimit { get; init; }
     public ObservableCollection<ImageModel> PicsCollection { get; init; } = new ObservableCollection<ImageModel>();
     public extern bool IsNothing { [ObservableAsProperty] get; }
 
 
-    public BlackWindowModel(IConsumer consumer)
+    public BlackWindowModel(IConsumer consumer, ISettings settings)
     {
+        DisplayLimit = settings.ShowTime;
+
         consumer.MessagesObs
             .ObserveOnDispatcher()
             .Subscribe(AddImage);
@@ -31,13 +30,24 @@ public class BlackWindowModel : ReactiveObject
 
     private void AddImage(string base64Image)
     {
-        var imageModel = new ImageModel(base64Image, (_amount++).ToString());
-        PicsCollection.Add(imageModel); 
+        var imageModel = new ImageModel(base64Image);        
             
         Observable.Return(imageModel)
             .Delay(TimeSpan.FromSeconds(DisplayLimit))  
             .ObserveOnDispatcher()
             .Subscribe(DeleteImage);
+
+        var timeoutObs = Observable
+            .Interval(TimeSpan.FromSeconds(1))
+            .Take(DisplayLimit - 1)
+            .Select(x => (DisplayLimit - 1 - x).ToString());
+
+        Observable
+            .Return(DisplayLimit.ToString())
+            .Merge(timeoutObs)
+            .ToPropertyEx(imageModel, x => x.SecondsLeft);
+
+        PicsCollection.Add(imageModel);
     }
 
     public void DeleteImage(ImageModel m)

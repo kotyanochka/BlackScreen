@@ -1,7 +1,6 @@
-﻿using BlackWindow.Converters;
-using System.Windows;
+﻿using System.Windows;
 
-namespace WPF.Converters;
+namespace BlackWindow.Converters;
 
 public class VisibilityConverter : BooleanConverter<Visibility, VisibilityConverter>
 {

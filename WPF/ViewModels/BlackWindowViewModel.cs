@@ -1,10 +1,8 @@
 ﻿using BlackWindow.Models;
-using Prism.Commands;
 using ReactiveUI;
 using System.Windows.Input;
-using WPF.Models;
 
-namespace WPF.ViewModels;
+namespace BlackWindow.ViewModels;
 
 public class BlackWindowViewModel : ReactiveObject
 {

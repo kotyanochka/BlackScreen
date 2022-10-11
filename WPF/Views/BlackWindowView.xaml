@@ -1,10 +1,10 @@
-﻿<Window x:Class="WPF.Views.BlackWindowView"
+﻿<Window x:Class="BlackWindow.Views.BlackWindowView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm ="clr-namespace:WPF.ViewModels"
-        xmlns:c ="clr-namespace:WPF.Converters"
+        xmlns:vm ="clr-namespace:BlackWindow.ViewModels"
+        xmlns:c ="clr-namespace:BlackWindow.Converters"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
@@ -34,24 +34,30 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Image Source="{Binding Bitmap}"
-                           Width="{Binding Bitmap.Width}"
-                           Height="{Binding Bitmap.Height}">
-                            <Image.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" 
-                                          Command="{Binding ElementName=main, Path=DataContext.DeleteCommand}" 
-                                          CommandParameter="{Binding}"/>
-                            </Image.InputBindings>
-                        </Image>
+                        <Grid DataContext="{Binding Base64String, Converter={c:Base64ToBitmapConverter}}">
+                            <Image                            
+                                Source="{Binding}"
+                                Width="{Binding Width}"
+                                Height="{Binding Height}"/>
+                        </Grid>
                         <TextBlock 
-                            Text="{Binding Text}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"
+                            Text="{Binding SecondsLeft}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"
                             Background="Black"
                             Foreground="White"
                             FontSize="16"
                             Padding="10"/>
+                        <Rectangle Fill="Transparent">
+                            <Rectangle.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" 
+                                          Command="{Binding ElementName=main, Path=DataContext.DeleteCommand}" 
+                                          CommandParameter="{Binding}"/>
+                            </Rectangle.InputBindings>
+                        </Rectangle>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        
     </Grid>
 </Window>

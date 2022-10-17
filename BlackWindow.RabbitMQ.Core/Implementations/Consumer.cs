@@ -18,19 +18,18 @@ public class Consumer : IConsumer
     {
         ConnectionString = settings.ConnectionString;
         SubscriptionId = settings.SubscriptionId;
-        Bus = RabbitHutch.CreateBus(ConnectionString);
+        Bus = RabbitHutch.CreateBus("host=localhost;virtualHost=/;username=guest;password=guest");
 
-#if DEBUG //TODO Удалить когда появится доступ к шине
+//#if DEBUG //TODO Удалить когда появится доступ к шине
+//        MessagesObs = Observable
+//            .Interval(TimeSpan.FromSeconds(3))
+//            .Take(10)
+//            .Select(x => x % 2 == 1 ? ImageSamples.ImageJpg : ImageSamples.ImagePng);
+//#else
         MessagesObs = Observable
-            .Interval(TimeSpan.FromSeconds(3))
-            .Take(10)
-            .Select(x => x % 2 == 1 ? ImageSamples.ImageJpg : ImageSamples.ImagePng);
-#else
-
-        MessagesObs = Observable
-            .Create<string>(observer => Bus.PubSub.SubscribeAsync<string>(SubscriptionId, observer.OnNext))
+            .Create<string>(observer => Bus.PubSub.Subscribe<string>(SubscriptionId, observer.OnNext))
             .Publish()
             .AutoConnect(0);
-#endif
+//#endif
     }
 }

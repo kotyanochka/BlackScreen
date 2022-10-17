@@ -12,7 +12,7 @@ public class Producer : IProducer
     }
     public Task Publish(string text)
     {
-        using var bus = RabbitHutch.CreateBus(ConnectionString);
+        using var bus = RabbitHutch.CreateBus("host=localhost;virtualHost=/;username=guest;password=guest");
         return bus.PubSub.PublishAsync(text);
     }
 }

@@ -4,9 +4,9 @@ namespace BlackWindow.RabbitMQ.Console
 {
     internal class Settings : ISettings
     {
-        public string ConnectionString => "TODO из файла";
+        public string ConnectionString => "host=localhost;virtualHost=/;username=guest;password=guest";
 
-        public string SubscriptionId => "TODO из файла";
+        public string SubscriptionId => "BlackScreen";
 
         public int ShowTime => 15;
     }

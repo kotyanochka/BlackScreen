@@ -25,7 +25,7 @@ namespace BlackWindow.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("host=localhost")]
+        [global::System.Configuration.DefaultSettingValueAttribute("host=localhost:15672, username=user")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));

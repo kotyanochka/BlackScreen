@@ -4,7 +4,6 @@ using EasyNetQ.Topology;
 using System.Reactive.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using ExchangeType = RabbitMQ.Client.ExchangeType;
 
 namespace BlackWindow.RabbitMQ.Core.Implementations;
 
@@ -28,12 +27,17 @@ public class Consumer : IConsumer
         ConnectionString = settings.ConnectionString;
         SubscriptionId = settings.SubscriptionId;
         var rabbitBus = RabbitHutch.CreateBus("host=localhost;virtualHost=/;username=guest;password=guest");
+
         Bus = rabbitBus.Advanced;
         Exchange = Bus.ExchangeDeclare("TestestExc", EasyNetQ.Topology.ExchangeType.Fanout);
         Queue = Bus.QueueDeclare("QueueTest");
         Bus.Bind(Exchange, Queue, "");
         MessagesObs = Observable
-            .Create<string>(observer => Bus.Consume())
+            .Create<string>(observer => Bus.Consume(Queue, (body, properties, info) =>
+            {
+                string content = System.Text.Encoding.UTF8.GetString(body);
+                observer.OnNext(content);
+            }))
             .Publish()
             .AutoConnect(0);
 #endif

@@ -35,9 +35,9 @@ namespace BlackWindow.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("BlackScreen")]
-        public string SubscriptionId {
+        public string QueueName {
             get {
-                return ((string)(this["SubscriptionId"]));
+                return ((string)(this["QueueName"]));
             }
         }
         
@@ -47,6 +47,18 @@ namespace BlackWindow.Properties {
         public int ShowTime {
             get {
                 return ((int)(this["ShowTime"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BlackScreenExchange")]
+        public string ExchangeName {
+            get {
+                return ((string)(this["ExchangeName"]));
+            }
+            set {
+                this["ExchangeName"] = value;
             }
         }
     }

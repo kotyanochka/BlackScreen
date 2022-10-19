@@ -28,7 +28,7 @@
                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Background="Black"/>
+                    <UniformGrid Background="Black"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
@@ -37,8 +37,7 @@
                         <Grid DataContext="{Binding Base64String, Converter={c:Base64ToBitmapConverter}}">
                             <Image                            
                                 Source="{Binding}"
-                                Width="{Binding Width}"
-                                Height="{Binding Height}"/>
+                                Stretch="Fill"/>
                         </Grid>
                         <TextBlock 
                             Text="{Binding SecondsLeft}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"

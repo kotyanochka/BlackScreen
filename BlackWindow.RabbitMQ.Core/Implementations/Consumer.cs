@@ -11,10 +11,6 @@ public class Consumer : IConsumer
 {
     protected IAdvancedBus Bus { get; init; }
 
-    public string SubscriptionId { get; init; }
-
-    public string ConnectionString { get; init; }
-
     public IExchange Exchange { get; init; }
 
     public IQueue Queue { get; init; }
@@ -23,14 +19,11 @@ public class Consumer : IConsumer
 
     public Consumer(ISettings settings)
     {
-#if DEBUG
-        ConnectionString = settings.ConnectionString;
-        SubscriptionId = settings.SubscriptionId;
-        var rabbitBus = RabbitHutch.CreateBus("host=localhost;virtualHost=/;username=guest;password=guest");
+        var rabbitBus = RabbitHutch.CreateBus(settings.ConnectionString);
 
         Bus = rabbitBus.Advanced;
-        Exchange = Bus.ExchangeDeclare("TestestExc", EasyNetQ.Topology.ExchangeType.Fanout);
-        Queue = Bus.QueueDeclare("QueueTest");
+        Exchange = Bus.ExchangeDeclare(settings.ExchangeName, EasyNetQ.Topology.ExchangeType.Fanout);
+        Queue = Bus.QueueDeclare(settings.QueueName);
         Bus.Bind(Exchange, Queue, "");
         MessagesObs = Observable
             .Create<string>(observer => Bus.Consume(Queue, (body, properties, info) =>
@@ -40,7 +33,6 @@ public class Consumer : IConsumer
             }))
             .Publish()
             .AutoConnect(0);
-#endif
     }
 }
 

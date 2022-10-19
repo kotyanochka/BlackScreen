@@ -3,6 +3,7 @@
 public interface ISettings
 {
     string ConnectionString { get; }
-    string SubscriptionId { get; }
+    string QueueName { get; }
+    string ExchangeName { get; }
     int ShowTime { get; }
 }

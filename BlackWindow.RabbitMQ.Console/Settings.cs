@@ -6,8 +6,10 @@ namespace BlackWindow.RabbitMQ.Console
     {
         public string ConnectionString => "host=localhost;virtualHost=/;username=guest;password=guest";
 
-        public string SubscriptionId => "BlackScreen";
+        public string QueueName => "BlackScreen";
 
         public int ShowTime => 15;
+
+        public string ExchangeName => "TestExchange";
     }
 }

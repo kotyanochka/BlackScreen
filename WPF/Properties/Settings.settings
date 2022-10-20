@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ConnectionString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">host=localhost:15672, username=user</Value>
+      <Value Profile="(Default)">host=localhost;virtualHost=/;username=guest;password=guest</Value>
     </Setting>
     <Setting Name="QueueName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">BlackScreen</Value>

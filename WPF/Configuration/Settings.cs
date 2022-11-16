@@ -1,6 +1,7 @@
 ﻿using BlackWindow.RabbitMQ.Core;
 
 namespace BlackWindow.Configuration;
+
 internal class Settings : ISettings
 {
     public string ConnectionString => Properties.Settings.Default.ConnectionString;

@@ -2,8 +2,8 @@
 using EasyNetQ.Topology;
 using System.Reactive.Linq;
 
-
 namespace BlackWindow.RabbitMQ.Core.Implementations;
+
 public class Consumer : IConsumer
 {
     protected IAdvancedBus Bus { get; init; }

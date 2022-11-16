@@ -3,6 +3,7 @@ using ReactiveUI;
 using System.Windows.Input;
 
 namespace BlackWindow.ViewModels;
+
 public class BlackWindowViewModel : ReactiveObject
 {   
     public BlackWindowModel Model { get; }
@@ -14,7 +15,7 @@ public class BlackWindowViewModel : ReactiveObject
     }
 
     /// <summary>
-    ///Команда удаления из коллекции 
+    ///Команда удаления из коллекции по нажатию
     /// </summary>
     public ICommand DeleteCommand { get; }   
 }

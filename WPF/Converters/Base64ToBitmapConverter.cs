@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 
 namespace BlackWindow.Converters;
+
 public class Base64ToBitmapConverter : ConverterBase<Base64ToBitmapConverter>
 {
     public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)

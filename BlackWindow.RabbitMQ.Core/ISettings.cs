@@ -1,4 +1,5 @@
 ﻿namespace BlackWindow.RabbitMQ.Core;
+
 /// <summary>
 /// Настройки приложения
 /// </summary>

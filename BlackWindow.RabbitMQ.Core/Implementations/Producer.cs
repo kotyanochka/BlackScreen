@@ -2,6 +2,7 @@
 using EasyNetQ.Topology;
 
 namespace BlackWindow.RabbitMQ.Core.Implementations;
+
 public class Producer : IProducer
 {
     public string ConnectionString { get; init; }

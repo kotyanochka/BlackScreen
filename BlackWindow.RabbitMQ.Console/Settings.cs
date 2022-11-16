@@ -1,15 +1,14 @@
 ﻿using BlackWindow.RabbitMQ.Core;
 
-namespace BlackWindow.RabbitMQ.Console
+namespace BlackWindow.RabbitMQ.Console;
+
+internal class Settings : ISettings
 {
-    internal class Settings : ISettings
-    {
-        public string ConnectionString => "host=localhost;virtualHost=/;username=guest;password=guest";
+    public string ConnectionString => "host=localhost;virtualHost=/;username=guest;password=guest";
 
-        public string QueueName => "BlackScreen";
+    public string QueueName => "BlackScreen";
 
-        public int ShowTime => 15;
+    public int ShowTime => 15;
 
-        public string ExchangeName => "TestExchange";
-    }
+    public string ExchangeName => "TestExchange";
 }

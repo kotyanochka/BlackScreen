@@ -6,7 +6,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace BlackWindow.RabbitMQ.Core.Implementations;
-
+//реализация consumer'a
 public class Consumer : IConsumer
 {
     protected IAdvancedBus Bus { get; init; }
@@ -19,12 +19,12 @@ public class Consumer : IConsumer
 
     public Consumer(ISettings settings)
     {
-        var rabbitBus = RabbitHutch.CreateBus(settings.ConnectionString);
-
-        Bus = rabbitBus.Advanced;
-        Exchange = Bus.ExchangeDeclare(settings.ExchangeName, EasyNetQ.Topology.ExchangeType.Fanout);
-        Queue = Bus.QueueDeclare(settings.QueueName);
-        Bus.Bind(Exchange, Queue, "");
+        var rabbitBus = RabbitHutch.CreateBus(settings.ConnectionString); //Для подключения к RabbitMQ
+        Bus = rabbitBus.Advanced; //Для расширения API с IAdvancedBus
+        Exchange = Bus.ExchangeDeclare(settings.ExchangeName, EasyNetQ.Topology.ExchangeType.Fanout); // объевляем обмен
+        Queue = Bus.QueueDeclare(settings.QueueName); // объявляем очередь
+        Bus.Bind(Exchange, Queue, ""); // соединяемся с очередью
+        //Каждый раз при приёме сообщения будет вызываться OnNext с полученной строкой
         MessagesObs = Observable
             .Create<string>(observer => Bus.Consume(Queue, (body, properties, info) =>
             {

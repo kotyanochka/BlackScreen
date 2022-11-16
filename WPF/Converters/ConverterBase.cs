@@ -4,7 +4,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace BlackWindow.Converters;
-
+//Конвертерная база
 public abstract class ConverterBase<T> : MarkupExtension, IValueConverter
      where T : class, new()
 {

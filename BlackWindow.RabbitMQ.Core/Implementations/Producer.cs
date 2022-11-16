@@ -2,7 +2,6 @@
 using EasyNetQ.Topology;
 
 namespace BlackWindow.RabbitMQ.Core.Implementations;
-//реализация тестового producer'a
 public class Producer : IProducer
 {
     public string ConnectionString { get; init; }
@@ -13,7 +12,7 @@ public class Producer : IProducer
         ConnectionString = settings.ConnectionString;
         QueueName = settings.QueueName;
     }
-//Публикация
+
     public Task Publish(string text)
     {
         var bus = RabbitHutch.CreateBus(ConnectionString).Advanced;

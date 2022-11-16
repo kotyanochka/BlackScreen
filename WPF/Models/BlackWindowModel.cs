@@ -6,20 +6,18 @@ using System.Reactive.Linq;
 using BlackWindow.RabbitMQ.Core;
 
 namespace BlackWindow.Models;
-//Модель с обработкой коллекции картинок
+
 public class BlackWindowModel : ReactiveObject
 {
-    //Время отображения
     public int DisplayLimit { get; init; }
-    //Коллекция с картинками
+
     public ObservableCollection<ImageModel> PicsCollection { get; init; } = new ObservableCollection<ImageModel>();
-    //Для проверки на пустоту
+
     public extern bool IsNothing { [ObservableAsProperty] get; }
 
 
     public BlackWindowModel(IConsumer consumer, ISettings settings)
     {
-        //Время отображения берётся из настроек
         DisplayLimit = settings.ShowTime;
         
         //Добавление картинки, если она пришла, вызов AddImage
@@ -55,12 +53,10 @@ public class BlackWindowModel : ReactiveObject
             .Return(DisplayLimit.ToString())
             .Merge(timeoutObs)
             .ToPropertyEx(imageModel, x => x.SecondsLeft);
-        
-        //Добавление в коллекцию
+       
         PicsCollection.Add(imageModel);
     }
 
-    //Удаление картинки из коллекции
     public void DeleteImage(ImageModel m)
     {
         PicsCollection.Remove(m);

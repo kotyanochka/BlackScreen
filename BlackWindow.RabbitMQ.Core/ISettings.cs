@@ -1,9 +1,23 @@
 ﻿namespace BlackWindow.RabbitMQ.Core;
-//Интерфейс настроек
+/// <summary>
+/// Настройки приложения
+/// </summary>
 public interface ISettings
 {
-    string ConnectionString { get; } //Строка подключения
-    string QueueName { get; } //Имя очереди 
-    string ExchangeName { get; } //Имя обмена
+    /// <summary>
+    /// Строка подключения
+    /// </summary>
+    string ConnectionString { get; }
+    /// <summary>
+    /// Имя очереди RabbitMQ
+    /// </summary>
+    string QueueName { get; }
+    /// <summary>
+    /// Имя обмена RabbitMQ
+    /// </summary>
+    string ExchangeName { get; }
+    /// <summary>
+    /// Время отображения, сек
+    /// </summary>
     int ShowTime { get; }
 }

@@ -3,16 +3,17 @@ using ReactiveUI.Fody.Helpers;
 
 namespace BlackWindow.Models;
 
-//Модель самого изображения
 public class ImageModel : ReactiveObject
 {
-    //Строка в base64
+    /// <summary>
+    /// Строка в base64
+    /// </summary>
     public string Base64String { get; init; }
-    
-    //Оставшееся количество секунд
+    /// <summary>
+    /// Количество оставшихся секунд
+    /// </summary>
     public extern string SecondsLeft { [ObservableAsProperty] get; }
-    
-    //Конструктор
+
     public ImageModel(string base64ImageString) 
     {
         Base64String = base64ImageString;       

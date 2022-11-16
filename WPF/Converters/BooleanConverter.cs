@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 
 namespace BlackWindow.Converters;
-//Конвертер логический
 public class BooleanConverter<T, TMarkup> : ConverterBase<TMarkup> where TMarkup : BooleanConverter<T, TMarkup>, new()
 {
     public BooleanConverter(T trueValue, T falseValue)
